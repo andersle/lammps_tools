@@ -1,3 +1,4 @@
+wget http://lammps.sandia.gov/tars/lammps-stable.tar.gz
 tarfile=lammps-stable.tar.gz
 version=7Aug19
 target_dir=~/opt/lammps/$version
