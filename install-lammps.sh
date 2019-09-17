@@ -19,13 +19,13 @@ rm -rf build/*
 cd build
 
 # Building with GNU Compilers:
-C_COMPILER=gcc
-CXX_COMPILER=g++
-F_COMPILER=gfortran
+#_COMPILER=gcc
+#CXX_COMPILER=g++
+#F_COMPILER=gfortran
 # Building with Intel Compilers:
-C_COMPILER=icc
-CXX_COMPILER=icpc
-F_COMPILER=ifort
+#C_COMPILER=icc
+#CXX_COMPILER=icpc
+#F_COMPILER=ifort
 # Building with LLVM/Clang Compilers:
 C_COMPILER=clang
 CXX_COMPILER=clang++
