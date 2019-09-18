@@ -19,7 +19,7 @@ rm -rf build/*
 cd build
 
 # Building with GNU Compilers:
-#_COMPILER=gcc
+#C_COMPILER=gcc
 #CXX_COMPILER=g++
 #F_COMPILER=gfortran
 # Building with Intel Compilers:
