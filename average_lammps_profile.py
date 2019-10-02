@@ -53,39 +53,49 @@ def update_variance(xdata, length, mean, var_m2):
     return length, mean, var_m2, variance
 
 
+def update_the_variance(key, average_vars, column):
+    """Update the variance for the given key."""
+    if key not in average_vars['average']:
+        average_vars['average'][key] = np.zeros_like(column)
+        average_vars['m2'][key] = np.zeros_like(column)
+        average_vars['n'][key] = 0.0
+        average_vars['var'][key] = np.full_like(column, float('inf'))
+    new_n, new_mean, new_m2, new_var = update_variance(
+        column,
+        average_vars['n'][key],
+        average_vars['average'][key],
+        average_vars['m2'][key],
+    )
+    average_vars['n'][key] = new_n
+    average_vars['average'][key] = new_mean
+    average_vars['m2'][key] = new_m2
+    average_vars['var'][key] = new_var
+
+
 def average_profiles(infile):
     """Read the given input file and return averaged profiles."""
     raw_data_matrix = []
     raw_data = {}
     # Variables for averaging:
-    average_data = {}
-    n_data = {}
-    m2_data = {}
-    var_data = {}
+    average_vars = {
+        'average': {},
+        'n': {},
+        'm2': {},
+        'var': {},
+    }
     for keys, _, data in read_lammps_profile(infile):
         raw_data_matrix.append(data)
         new_data = np.array(data)
         for i, key in enumerate(keys):
             column = new_data[:, i]
-            if key not in average_data:
-                average_data[key] = np.zeros_like(column)
-                m2_data[key] = np.zeros_like(column)
-                n_data[key] = 0.0
-                var_data[key] = np.full_like(column, float('inf'))
-            new_n, new_mean, new_m2, new_var = update_variance(
-                column,
-                n_data[key],
-                average_data[key],
-                m2_data[key],
-            )
-            n_data[key] = new_n
-            average_data[key] = new_mean
-            m2_data[key] = new_m2
-            var_data[key] = new_var
+            update_the_variance(key, average_vars, column)
             if key not in raw_data:
                 raw_data[key] = []
             raw_data[key].append(column)
-    return raw_data, raw_data_matrix, average_data, var_data
+    return (raw_data,
+            raw_data_matrix,
+            average_vars['average'],
+            average_vars['var'])
 
 
 def plot_all_items(data, error):
@@ -216,7 +226,7 @@ def main(infile, make_plot, split=False):
 
 def create_parser():
     """Create a parser."""
-    parser = argparse.ArgumentParser(description='Average profile from lammps')
+    parser = argparse.ArgumentParser(description='Average profiles from LAMMPS')
     parser.add_argument(
         '-f',
         '--file',

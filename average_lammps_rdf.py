@@ -146,8 +146,8 @@ def plot_all_sets(raw_data, key, color_map_name='viridis'):
         if xpos is None:
             xpos = np.arange(len(datai))
         ax1.plot(xpos, datai, color=colors[i], alpha=0.5)
-    ax1.set_ylabel('Bin no.')
-    ax1.set_xlabel(key)
+    ax1.set_xlabel('Bin no.')
+    ax1.set_ylabel(key)
     fig.tight_layout()
 
 
