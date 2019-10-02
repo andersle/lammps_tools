@@ -21,3 +21,11 @@ python average_lammps_profile.py -f temp1.txt -p
 ```
 
 Note: The script makes certain assumptions on what variables to plot.
+
+## average_lammps_rdf.py
+
+Usage:
+
+```bash
+python average_lammps_profile.py -f rdf-P-C2.txt -p
+```
