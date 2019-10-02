@@ -38,8 +38,6 @@ python average_lammps_profile.py -f temp1.txt -p
 
 ### Notes
 
-* The script makes certain assumptions on what variables to plot.
-
 * The profiles are assumed to be written by LAMMPS using a command like:
   ```
   fix out_temp1 all ave/chunk 5 1000 5000 cc1 temp file temp1.txt

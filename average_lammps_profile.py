@@ -190,10 +190,11 @@ def main(infile, make_plot, split=False):
     if make_plot:
         print('Plotting all averaged profiles.')
         plot_all_items(average_data, var_data)
-        plot_all_sets(raw_data, 'ncount')
-        plot_all_sets(raw_data, 'v_kintemp')
-        xkey = 'coord1'
-        for ykey in ('ncount', 'v_kintemp'):
+        for ykey in raw_data:
+            if ykey in ('coord1', 'chunk'):
+                continue
+            plot_all_sets(raw_data, ykey)
+            xkey = 'coord1'
             plot_xy_data(
                 average_data[xkey],
                 average_data[ykey],
@@ -226,7 +227,7 @@ def main(infile, make_plot, split=False):
 
 def create_parser():
     """Create a parser."""
-    parser = argparse.ArgumentParser(description='Average profiles from LAMMPS')
+    parser = argparse.ArgumentParser(description='Average profile(s) from LAMMPS')
     parser.add_argument(
         '-f',
         '--file',
