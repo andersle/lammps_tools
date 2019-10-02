@@ -21,7 +21,7 @@ Usage:
 python read_lammps_log.py log.lammps
 ```
 
-## Notes
+### Notes
 
 * The script makes certain assumptions on what variables to plot.
 
