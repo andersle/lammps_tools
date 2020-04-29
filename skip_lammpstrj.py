@@ -41,9 +41,9 @@ def main(infile, skip=10):
     outfile = '{}-skip-{}.lammpstrj'.format(
         str(pathlib.Path(infile).stem), skip
     )
-    print('Outfile: {}'.format(outfile))
 
     outfile_path = infile_path.parent.joinpath(outfile)
+    print('Outfile: {}'.format(outfile_path))
 
     print('Getting number of frames in original file...')
     frames_tot = count_frames(infile_path)
