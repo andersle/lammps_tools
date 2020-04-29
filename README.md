@@ -58,3 +58,15 @@ python average_lammps_profile.py -f rdf-X-Y.txt -p
   ```
   fix fix_rdf_X_Y all ave/time 100 1 100 c_rdf_X_Y[*] file rdf-X-Y.txt mode vector
   ```
+
+## skip_lammpstrj.py
+
+A script for reducing the size of .lammpstrj files. It will write a new file with every N'th frame.
+
+Usage:
+
+```bash
+python skip_lammpstrj.py infile.lammpstrj 100
+```
+
+This will produce a new file ``infile-skip-100.lammpstrj`` with every 100th frame from ``infile.lammpstrj``.
