@@ -3,9 +3,6 @@ from math import ceil
 import sys
 import numpy as np
 from matplotlib import pyplot as plt
-from matplotlib.gridspec import GridSpec
-
-
 plt.style.use('seaborn-talk')
 
 
@@ -45,36 +42,33 @@ def read_lammps_log(logfile):
 
 def plot_all_items(data):
     """Plot all items in the given dictionary."""
-    fig = plt.figure()
-    if len(data) < 3:
-        ncol = 1
-    else:
-        ncol = 2
+    ncol = 1 if len(data) < 3 else 2
     nrow = ceil(len(data) / ncol)
-    grid = GridSpec(nrow, ncol)
+    fig, axes = plt.subplots(constrained_layout=True, nrows=nrow, ncols=ncol)
+    try:
+        axes = axes.flatten()
+    except AttributeError:
+        axes = [axes]
     for i, (key, val) in enumerate(data.items()):
-        row, col = divmod(i, ncol)
-        axi = fig.add_subplot(grid[row, col])
+        axi = axes[i]
         xpos = np.arange(len(val))
-        axi.plot(xpos, val, lw=2, alpha=0.8)
-        axi.axhline(y=np.average(val), lw=2, ls='--', color='#262626',
+        axi.plot(xpos, val, lw=3, alpha=0.8)
+        axi.axhline(y=np.average(val), lw=3, ls='--', color='#262626',
                     alpha=0.8)
-        axi.set_xlabel('Step no.')
-        axi.set_ylabel(key)
-    fig.tight_layout()
+        axi.set(xlabel='Step no.', ylabel=key)
+    return fig, axes
 
 
 def plot_selected_items(xdata, data, selection, add_average=False):
     """Plot some selected data in the same plot."""
-    fig = plt.figure()
-    ax1 = fig.add_subplot(111)
+    fig, ax1 = plt.subplots(constrained_layout=True)
     for key in selection:
-        line, = ax1.plot(xdata, data[key], lw=2, alpha=0.8, label=key)
+        line, = ax1.plot(xdata, data[key], lw=3, alpha=0.8, label=key)
         if add_average:
-            ax1.axhline(y=np.average(data[key]), lw=2, ls=':',
+            ax1.axhline(y=np.average(data[key]), lw=3, ls=':',
                         color=line.get_color(), alpha=0.8)
     ax1.legend(loc='upper left')
-    fig.tight_layout()
+    return fig, ax1
 
 
 def main(logfile):
@@ -83,8 +77,8 @@ def main(logfile):
         print('Set found')
         print('Keys:')
         for i in keys:
-            print('- {}'.format(i))
-        print('Length: {}'.format(len(data)))
+            print(f'- {i}')
+        print(f'Length: {len(data)}')
         data_matrix = np.array(data)
         data_dict = {}
         for i, key in enumerate(keys):
@@ -93,16 +87,7 @@ def main(logfile):
         plot_selected_items(
             data_dict['step'],
             data_dict,
-            ['c_hot_temp', 'c_cold_temp'],
-            add_average=True
-        )
-        data_dict['sum_rescale'] = (
-            data_dict['f_hot_rescale'] + data_dict['f_cold_rescale']
-        )
-        plot_selected_items(
-            data_dict['step'],
-            data_dict,
-            ['f_cold_rescale', 'f_hot_rescale', 'sum_rescale'],
+            ['temp'],
             add_average=True
         )
     plt.show()
