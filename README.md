@@ -25,6 +25,23 @@ python read_lammps_log.py log.lammps
 
 * The script makes certain assumptions on what variables to plot.
 
+## read_lammps_data.py
+
+A script for reading topology information from LAMMPS data files.
+
+Usage:
+
+```bash
+python read_lammps_data.py system.data
+```
+
+### Notes
+
+* This script will attempt to write a GROMACS .gro file with the
+  system coordinates.
+* It will probably be more useful to modify the script to suit
+  your needs, e.g. if you want to investigate bonds, angles etc.
+
 
 ## average_lammps_profile.py
 
