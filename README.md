@@ -43,6 +43,17 @@ python read_lammps_data.py system.data
   your needs, e.g. if you want to investigate bonds, angles etc.
 
 
+## read_lammpstrj.py
+
+A script for reading frames from a LAMMPS trajectory file.
+
+Usage:
+
+```bash
+python read_lammpstrj.py dump.lammpstrj
+```
+
+
 ## average_lammps_profile.py
 
 A script for averaging profiles created by LAMMPS.
