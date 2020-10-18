@@ -2,7 +2,15 @@
 import sys
 
 # Format for GROMACS gro files:
-_GRO_FMT = '{0:5d}{1:5s}{2:5s}{3:5d}{4:8.3f}{5:8.3f}{6:8.3f}'
+_GRO_FMT = [
+    ('{:5d}', 5),
+    ('{:5s}', 5),
+    ('{:5s}', 5),
+    ('{:5d}', 5),
+    ('{:8.3f}', 8),
+    ('{:8.3f}', 8),
+    ('{:8.3f}', 8),
+]
 _GRO_BOX_FMT = '{:15.9f}'
 
 # Sections of data file with topology information:
@@ -151,6 +159,20 @@ def get_atom_table(topology):
     return atoms
 
 
+def apply_format_gro(*data):
+    """Apply the GROMACS format to the given data.
+
+    Here we make sure that no strings are longer than they should be.
+    """
+    string = []
+    for (fmti, maxlen), datai in zip(_GRO_FMT, data):
+        tmp = fmti.format(datai)
+        if len(tmp) > maxlen:
+            tmp = tmp[:maxlen]
+        string.append(tmp)
+    return ''.join(string)
+
+
 def write_gro_file(outputfile, topology, atom_names=None):
     """Create a gro file from the topology."""
 
@@ -166,7 +188,7 @@ def write_gro_file(outputfile, topology, atom_names=None):
             _, mol_idx, atom_type = atom_table[key][:3]
             xyz = [i * 0.1 for i in atom_table[key][4:7]]
             atom_name = atom_names.get(atom_type, str(atom_type))
-            buff = _GRO_FMT.format(
+            buff = apply_format_gro(
                 mol_idx,
                 'MOL',
                 atom_name,
